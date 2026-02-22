@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Alat Penyemak Kelulusan Murid</title>
+    
+
+  </head>
+    
+  <body>
+  <html lang="ms">
+
+<head>
+
+<title>Alat Penyemak Kelulusan Murid</title>
+
+<style>
+  /*this is my favotie part*/
+  body { font-family: sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+  h1 { font-size: 1.2rem; text-align: center; }
+  ol { padding-left: 20px; }
+  li { margin: 10px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .input-wrap { display: flex; flex-direction: column; align-items: flex-end; }
+  input { width: 70px; padding: 4px; text-align: center; }
+  input.invalid { border: 1px solid red; }
+  .error { color: red; font-size: 0.75rem; margin-top: 2px; display: none; }
+  button { display: block; margin: 20px auto; padding: 8px 24px; font-size: 1rem; cursor: pointer; }
+  #result { border: 1px solid #ccc; border-radius: 6px; padding: 16px; margin-top: 10px; }
+  #result ol { margin: 0; }
+  .lulus { color: green; }
+  .gagal { color: red; }
+  #status { font-weight: bold; font-size: 1.1rem; margin-top: 12px; text-align: center; }
+</style>
+
+</head>
+
+<body>
+
+<h1>Alat Penyemak Kelulusan Murid</h1>
+<ol id="subjects">
+  <li><span>Bahasa Melayu</span>           <div class="input-wrap"><input type="number"><span class="error"></span></div></li>
+  <li><span>Bahasa Inggeris</span>         <div class="input-wrap"><input type="number"><span class="error"></span></div></li>
+  <li><span>Sejarah</span>                 <div class="input-wrap"><input type="number"><span class="error"></span></div></li>
+  <li><span>Sains</span>                   <div class="input-wrap"><input type="number"><span class="error"></span></div></li>
+  <li><span>Matematik</span>               <div class="input-wrap"><input type="number"><span class="error"></span></div></li>
+  <li><span>Asas Sains &amp; Komputer</span> <div class="input-wrap"><input type="number"><span class="error"></span></div></li>
+</ol>
+<button onclick="semak()">Semak</button>
+<div id="result" style="display:none">
+  <ol id="result-list"></ol>
+  <div id="status"></div>
+</div>
+
+<script>
+function semak() {
+  const items = document.querySelectorAll('#subjects li');
+  let hasError = false;
+
+  items.forEach(item => {
+    const input = item.querySelector('input');
+    const errSpan = item.querySelector('.error');
+    const raw = input.value.trim();
+    const val = Number(raw);
+
+    input.classList.remove('invalid');
+    errSpan.style.display = 'none';
+    errSpan.textContent = '';
+
+    let msg = '';
+    if (raw === '') {
+      msg = 'Sila masukkan markah.';
+    } else if (isNaN(val)) {
+      msg = 'Markah mestilah nombor.';
+    } else if (val < 0) {
+      msg = 'Markah tidak boleh negatif.';
+    } else if (val > 100) {
+      msg = 'Markah tidak boleh melebihi 100.';
+    }
+
+    if (msg) {
+      input.classList.add('invalid');
+      errSpan.textContent = msg;
+      errSpan.style.display = 'block';
+      hasError = true;
+    }
+  });
+
+  if (hasError) {
+    document.getElementById('result').style.display = 'none';
+    return;
+  }
+
+  const list = document.getElementById('result-list');
+  list.innerHTML = '';
+  let allPass = true;
+
+/*Create a brand new list based on the marks that the user inputs*/
+  items.forEach(item => {
+    const name = item.querySelector('span').textContent;
+    const val = Number(item.querySelector('input').value);
+    const pass = val >= 45;
+    if (!pass) allPass = false;
+    const li = document.createElement('li');
+    li.innerHTML = name + ': <span class="' + (pass ? 'lulus' : 'gagal') + '">' + (pass ? 'Lulus' : 'Gagal') + ' (' + val + ')</span>';
+    list.appendChild(li);
+  });
+
+/*Final comment on whether the student passed overall*/
+  const status = document.getElementById('status');
+  status.textContent = allPass ? 'Taniah, Murid LULUS!' : 'Maaf, Murid GAGAL!';
+  status.className = allPass ? 'lulus' : 'gagal';
+  document.getElementById('result').style.display = 'block';
+}
+</script>
+
+</body>
+
+</html>
+    
+  </body>
+  
+</html>
